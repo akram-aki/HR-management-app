@@ -45,7 +45,7 @@ export default function LeaveRequestForm() {
             type="text"
             value={date}
             onChange={(ev) => setDate(ev.target.value)}
-            placeholder="todooooo"
+            placeholder="todooooo + avalable ballence"
             className="w-full border p-4 rounded-xl shadow-sm"
           />
 
