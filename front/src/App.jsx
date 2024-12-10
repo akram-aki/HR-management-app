@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Layout from "./components/NavBar/Layout";
 import axios from "axios";
 import AbsencePage from "./components/absencePage/Index";
+import PayslipsPage from "./components/payslipsPage/Index";
 
 axios.defaults.baseURL = "http://localhost:8000/";
 
