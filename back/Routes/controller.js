@@ -192,6 +192,27 @@ const requestAbsence = (req, res) => {
   );
 };
 
+const payCalculator = (req, res) => {
+  const { id, token, totSI } = req.body;
+  let base_salary;
+  const calIrg = (base_salary, tot) => {
+    const baseImposable = base_salary + totSI;
+    let irg = baseImposable;
+  };
+  if (token) {
+    jwt.verify(token, jwtSecret, {}, async (err, userData) => {
+      if (err) return res.json("not authorised");
+    });
+  }
+
+  pool.query("SELECT * FROM Employees WHERE id=$1", [id], (error, result) => {
+    if (error) return res.json("an error occured while fetching");
+    base_salary = result.rows[0].base_salary;
+  });
+  const RETENUE_SECU_SLE = base_salary * 0.09;
+  const RETENUE_IRG = calIrg(base_salary, tot);
+};
+
 export {
   fetchAbsences,
   uploadPhoto,
