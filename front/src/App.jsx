@@ -19,6 +19,7 @@ function App() {
             <Route path="/" element={<Layout />}>
               <Route path="/" element={<HomePage />} />
               <Route path="/absence" element={<AbsencePage />} />
+              <Route path="/payslips" element={<PayslipsPage />} />
             </Route>
           </Routes>
         </Router>
