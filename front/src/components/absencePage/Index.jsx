@@ -1,11 +1,12 @@
 import { useState } from "react";
+import LeaveRequestForm from "./LeaveRequestForm";
 export default function AbsencePage() {
   const [butState, setButState] = useState("absenceSummary");
   return (
     <div className="relative  p-20">
       <h1 className="absolute top-5 text-4xl">Absence</h1>
       <div className="grid grid-cols-[1fr_2.5fr]">
-        <div className=" grid  bg-[#bebebe] p-5">
+        <div className=" flex flex-col gap-8 bg-[#bebebe] p-5">
           <button
             onClick={() => setButState("absenceSummary")}
             className={
@@ -19,7 +20,7 @@ export default function AbsencePage() {
           <button
             onClick={() => setButState("requestNewAbsence")}
             className={
-              butState === "absenceSummary"
+              butState === "requestNewAbsence"
                 ? "bg-gray-500 p-5 w-96 h-[10vh]"
                 : "bg-[#d9d9d9] p-5 w-96 h-[10vh]"
             }
@@ -29,7 +30,7 @@ export default function AbsencePage() {
           <button
             onClick={() => setButState("absenceHistory")}
             className={
-              butState === "absenceSummary"
+              butState === "absenceHistory"
                 ? "bg-gray-500 p-5 w-96 h-[10vh]"
                 : "bg-[#d9d9d9] p-5 w-96 h-[10vh]"
             }
@@ -37,7 +38,13 @@ export default function AbsencePage() {
             Absences History{" "}
           </button>
         </div>
-        <div className="bg-[#d9d9d9] h-[73vh]"></div>
+        <div className="bg-[#d9d9d9] h-[130vh]">
+          {butState === "requestNewAbsence" ? (
+            <LeaveRequestForm />
+          ) : (
+            <div>hi</div>
+          )}
+        </div>
       </div>
     </div>
   );
