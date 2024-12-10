@@ -12,9 +12,9 @@ const __dirname = Path.dirname(__filename);
 const jwtSecret = "ASDADasldfakd&%*w12240810234598as%^kfdnjasf02as";
 
 const loginUser = (req, res) => {
-  const { email, password } = req.body;
+  const { username, password } = req.body;
 
-  pool.query(queries.dupEmailCheck, [email], (error, results) => {
+  pool.query(queries.dupNameCheck, [username], (error, results) => {
     if (error) {
       res.status(500).json({ msg: "an error occured, try again later" });
       throw error;
@@ -100,4 +100,4 @@ const uploadPhoto = (req, res) => {
   res.json(uploadedPhotos);
 };
 
-export { uploadPhoto };
+export { uploadPhoto, loginUser };
