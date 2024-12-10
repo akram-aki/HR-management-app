@@ -5,25 +5,26 @@ import Cookies from "js-cookie";
 export const userContext = createContext({});
 
 export function User({ children }) {
-  const [currentUser, setCurrentUser] = useState("");
+  const [username, setusername] = useState("");
   const [id, setId] = useState("");
 
   useEffect(() => {
-    if (!currentUser) {
+    if (!username) {
       const { token } = Cookies.get();
       axios
         .post("/profile", {
           token,
         })
         .then((response) => {
-          setCurrentUser(response.data.name);
+          console.log(response.data);
+          setusername(response.data.username);
           setId(response.data.id);
         });
     }
   }, []);
 
   return (
-    <userContext.Provider value={{ currentUser, id }}>
+    <userContext.Provider value={{ username, id }}>
       {children}
     </userContext.Provider>
   );

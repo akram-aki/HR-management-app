@@ -25,7 +25,7 @@ const loginUser = (req, res) => {
       if (password === user.password) {
         user.password = null;
         jwt.sign(
-          { email: user.email, id: user.id, name: user.user_name },
+          { id: user.id, username: user.username },
           jwtSecret,
           {},
           (err, token) => {
@@ -39,13 +39,13 @@ const loginUser = (req, res) => {
   });
 };
 
-const getUserName = (req, res) => {
+const getUserProfile = (req, res) => {
   const { token } = req.body;
 
   if (token) {
     jwt.verify(token, jwtSecret, {}, async (err, userData) => {
       if (err) throw err;
-      res.json({ name: userData.name, id: userData.id });
+      res.json({ username: userData.username, id: userData.id });
     });
   }
 };
@@ -100,4 +100,4 @@ const uploadPhoto = (req, res) => {
   res.json(uploadedPhotos);
 };
 
-export { uploadPhoto, loginUser };
+export { uploadPhoto, getUserProfile, loginUser };
