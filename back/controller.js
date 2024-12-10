@@ -173,23 +173,80 @@ const fetchAbsences = (req, res) => {
   });
 };
 
-const requestAbsence = (req, res) => {
-  const { date, selected, photoLink, id, token, username } = req.body;
-  console.log({ date, selected, photoLink, id, token, username });
+const requestAbsence = async (req, res) => {
+  const formData = new FormData();
+  formData.append("file", fs.createReadStream("uploads/paycheck.pdf"));
+  try {
+    const documentID = await axios.post(
+      "https://api.signnow.com/document",
+      formData,
+      {
+        headers: {
+          ...formData.getHeaders(),
+          "Authorization": "Bearer ae76cabec710399e1cd216797b6e5e84b917ae75e7c3ffb94f74eba31aea0934"
+        }
+      });
+  }
+  catch (error) {
+    console.error("Error:", error.response?.data || error.message); // Handle error
+  }
+};
+
+const { date, selected, photoLink, id, token, username } = req.body;
+console.log({ date, selected, photoLink, id, token, username });
+if (token) {
+  jwt.verify(token, jwtSecret, {}, async (err, userData) => {
+    if (err) return res.json("not authorised");
+  });
+}
+
+pool.query(
+  queries.requestAbsence,
+  [id, username, date, photoLink, selected],
+  (error, results) => {
+    if (error) return res.json("an error occured while fetching");
+    res.json(results.rows[0]);
+  }
+);
+
+
+const payCalculator = (req, res) => {
+  const { id, token, totSI } = req.body;
+  let base_salary;
+
+  const calIrg = (base_salary, tot) => {
+    const baseImposable = base_salary + tot;
+    let [x1, x2, x3, x4] = [30000, 10000, 40000, 80000];
+    let [y1, y2, y3, y4] = [0, 0.2, 0.3, 0.33];
+    let Y;
+    if (baseImposable > 80000) {
+      Y = x1 * y1 + x2 * y2 + x3 * y3 + (baseImposable - x4) * y4;
+    } else if (baseImposable > 40000) {
+      Y = x1 * y1 + x2 * y2 + (baseImposable - x3) * y3;
+    } else if (baseImposable > 30000) {
+      Y = x1 * y1 + (baseImposable - x2) * y2;
+    }
+    let t = Y * 0.4;
+    t = t > 1500 ? 1500 : t;
+    t = t < 1000 ? 1000 : t;
+    Y = Y - t;
+    return Y;
+  };
+
   if (token) {
     jwt.verify(token, jwtSecret, {}, async (err, userData) => {
       if (err) return res.json("not authorised");
     });
   }
 
-  pool.query(
-    queries.requestAbsence,
-    [id, username, date, photoLink, selected],
-    (error, results) => {
-      if (error) return res.json("an error occured while fetching");
-      res.json(results.rows[0]);
-    }
-  );
+  pool.query("SELECT * FROM Employees WHERE id=$1", [id], (error, result) => {
+    if (error) return res.json("an error occured while fetching");
+    base_salary = result.rows[0].base_salary;
+  });
+  const RETENUE_SECU_SLE = base_salary * 0.09;
+  const RETENUE_IRG = calIrg(base_salary, tot);
+  const NET_A_PAYER = base_salary + totSI - RETENUE_SECU_SLE - RETENUE_IRG;
+  res.json({ RETENUE_SECU_SLE, RETENUE_IRG, NET_A_PAYER });
 };
 
 export {
@@ -200,4 +257,5 @@ export {
   enter,
   leave,
   requestAbsence,
+  payCalculator,
 };
