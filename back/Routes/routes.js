@@ -6,19 +6,30 @@ import {
   getUserProfile,
   enter,
   requestAbsence,
-} from "./controller.js";
-
-import { uploadPhoto } from "./controller.js";
+  uploadPhoto,
+} from "../controller.js";
+import { verifyRole } from "../middleware.js"; // Import middleware
 
 const router = Router();
 
-const idk = multer({ dest: "C:/Users/songo/Desktop/hadjer/api/Images" });
-router.post("/uploadPhoto", idk.array("photos", 100), uploadPhoto);
+// Multer configuration
+//const idk = multer({ dest: "C:/Users/songo/Desktop/hadjer/api/Images" });
 
+// Public routes
+//router.post("/uploadPhoto", idk.array("photos", 100), uploadPhoto);
 router.post("/login", loginUser);
 router.post("/profile", getUserProfile);
 router.post("/enter", enter);
 router.post("/fetchAbsences", fetchAbsences);
 router.post("/requestAbsence", requestAbsence);
+
+// Role-based protected routes
+router.get("/admin/dashboard", verifyRole("admin"), (req, res) => {
+  res.json({ msg: "Welcome to the admin dashboard!" });
+});
+
+router.get("/user/profile", verifyRole("user"), (req, res) => {
+  res.json({ msg: "Welcome to your profile!" });
+});
 
 export default router;

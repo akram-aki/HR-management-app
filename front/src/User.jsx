@@ -1,31 +1,46 @@
-import { createContext, useEffect, useState } from "react";
+import React, { createContext, useEffect, useState } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
 
+// Create the context
 export const userContext = createContext({});
 
 export function User({ children }) {
-  const [username, setusername] = useState("");
-  const [id, setId] = useState("");
-  const [role, setRole] = useState("");
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true); // To handle async loading
 
   useEffect(() => {
-    if (!username) {
-      const { token } = Cookies.get();
+    const token = Cookies.get("token"); // Get token directly
+
+    if (token) {
       axios
-        .post("/profile", {
-          token,
-        })
+        .post("/profile", { token })
         .then((response) => {
-          setusername(response.data.username);
-          setId(response.data.id);
-          setRole(response.data.role);
+          setUser({
+            username: response.data.username,
+            id: response.data.id,
+            role: response.data.role,
+          });
+        })
+        .catch((err) => {
+          console.error("Failed to fetch user profile", err);
+          Cookies.remove("token"); // Remove invalid token
+        })
+        .finally(() => {
+          setLoading(false);
         });
+    } else {
+      setLoading(false);
     }
   }, []);
 
+  if (loading) {
+    // Render a loading state or spinner while fetching user data
+    return <div>Loading...</div>;
+  }
+
   return (
-    <userContext.Provider value={{ username, id, role }}>
+    <userContext.Provider value={user}>
       {children}
     </userContext.Provider>
   );

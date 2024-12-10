@@ -1,4 +1,4 @@
-import pool from "../db.js";
+import pool from "./db.js";
 import { queries } from "./queries.js";
 import jwt from "jsonwebtoken";
 import axios from "axios";
