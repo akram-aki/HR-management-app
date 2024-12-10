@@ -53,6 +53,17 @@ CREATE TABLE IF NOT EXISTS RolesPermissions (
     role VARCHAR(20) CHECK (role IN ('hr_manager', 'accountant')) NOT NULL,
     permission VARCHAR(50) NOT NULL
 );
+
+-- Create Employee demand absense table
+CREATE TABLE EmployeeAbsence (
+    id SERIAL PRIMARY KEY,
+    employee_id INT NOT NULL,
+    employee_name VARCHAR(100) NOT NULL,
+    date DATE NOT NULL,
+    justification_photo_url TEXT NOT NULL,
+    status VARCHAR(10) CHECK (status IN ('pending', 'accepted', 'rejected')) DEFAULT 'pending'
+);
+
 `;
 
 // Function to execute the script

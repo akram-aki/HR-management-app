@@ -1,5 +1,6 @@
 import { useState } from "react";
 import LeaveRequestForm from "./LeaveRequestForm";
+import HistoryComponent from "./HistoryComponent";
 export default function AbsencePage() {
   const [butState, setButState] = useState("absenceSummary");
   return (
@@ -41,6 +42,8 @@ export default function AbsencePage() {
         <div className="bg-[#d9d9d9] h-[130vh]">
           {butState === "requestNewAbsence" ? (
             <LeaveRequestForm />
+          ) : butState === "absenceHistory" ? (
+            <HistoryComponent />
           ) : (
             <div>hi</div>
           )}

@@ -7,6 +7,7 @@ export const userContext = createContext({});
 export function User({ children }) {
   const [username, setusername] = useState("");
   const [id, setId] = useState("");
+  const [role, setRole] = useState("");
 
   useEffect(() => {
     if (!username) {
@@ -16,15 +17,15 @@ export function User({ children }) {
           token,
         })
         .then((response) => {
-          console.log(response.data);
           setusername(response.data.username);
           setId(response.data.id);
+          setRole(response.data.role);
         });
     }
   }, []);
 
   return (
-    <userContext.Provider value={{ username, id }}>
+    <userContext.Provider value={{ username, id, role }}>
       {children}
     </userContext.Provider>
   );
