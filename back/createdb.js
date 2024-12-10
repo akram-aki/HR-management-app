@@ -60,7 +60,7 @@ async function executeScript() {
   const client = new Client({
     user: "postgres", // Replace with your PostgreSQL username
     host: "localhost", // Replace with your PostgreSQL host
-    database: "postgres", // Replace with your PostgreSQL database name
+    database: "hr", // Replace with your PostgreSQL database name
     password: "pataki", // Replace with your PostgreSQL password
     port: 1234, // Default PostgreSQL port
   });
