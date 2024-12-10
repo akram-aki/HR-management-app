@@ -195,10 +195,26 @@ const requestAbsence = (req, res) => {
 const payCalculator = (req, res) => {
   const { id, token, totSI } = req.body;
   let base_salary;
+
   const calIrg = (base_salary, tot) => {
-    const baseImposable = base_salary + totSI;
-    let irg = baseImposable;
+    const baseImposable = base_salary + tot;
+    let [x1, x2, x3, x4] = [30000, 10000, 40000, 80000];
+    let [y1, y2, y3, y4] = [0, 0.2, 0.3, 0.33];
+    let Y;
+    if (baseImposable > 80000) {
+      Y = x1 * y1 + x2 * y2 + x3 * y3 + (baseImposable - x4) * y4;
+    } else if (baseImposable > 40000) {
+      Y = x1 * y1 + x2 * y2 + (baseImposable - x3) * y3;
+    } else if (baseImposable > 30000) {
+      Y = x1 * y1 + (baseImposable - x2) * y2;
+    }
+    let t = Y * 0.4;
+    t = t > 1500 ? 1500 : t;
+    t = t < 1000 ? 1000 : t;
+    Y = Y - t;
+    return Y;
   };
+
   if (token) {
     jwt.verify(token, jwtSecret, {}, async (err, userData) => {
       if (err) return res.json("not authorised");
@@ -211,6 +227,8 @@ const payCalculator = (req, res) => {
   });
   const RETENUE_SECU_SLE = base_salary * 0.09;
   const RETENUE_IRG = calIrg(base_salary, tot);
+  const NET_A_PAYER = base_salary + totSI - RETENUE_SECU_SLE - RETENUE_IRG;
+  res.json({ RETENUE_SECU_SLE, RETENUE_IRG, NET_A_PAYER });
 };
 
 export {
@@ -221,4 +239,5 @@ export {
   enter,
   leave,
   requestAbsence,
+  payCalculator,
 };
