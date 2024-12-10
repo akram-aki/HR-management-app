@@ -25,7 +25,7 @@ const loginUser = (req, res) => {
       if (password === user.password) {
         user.password = null;
         jwt.sign(
-          { id: user.id, username: user.username },
+          { id: user.id, username: user.username, role: user.role },
           jwtSecret,
           {},
           (err, token) => {
@@ -45,7 +45,11 @@ const getUserProfile = (req, res) => {
   if (token) {
     jwt.verify(token, jwtSecret, {}, async (err, userData) => {
       if (err) throw err;
-      res.json({ username: userData.username, id: userData.id });
+      res.json({
+        username: userData.username,
+        id: userData.id,
+        role: userData.role,
+      });
     });
   }
 };
@@ -86,18 +90,114 @@ const uploadPhoto = (req, res) => {
   const uploadedPhotos = [];
   const { id } = req.body;
 
+  // Define the directory to save the uploaded files
+  const uploadDir = Path.join(__dirname, "uploads");
+
+  // Ensure the upload directory exists
+  if (!fs.existsSync(uploadDir)) {
+    fs.mkdirSync(uploadDir, { recursive: true });
+  }
+
+  // Process each uploaded file
   for (let i = 0; i < req.files.length; i++) {
     const { path, originalname } = req.files[i];
 
+    // Extract file extension
     const parts = originalname.split(".");
     const ext = parts[parts.length - 1];
-    const newPath =
-      path.replace(Path.basename(path), id + "000" + Date.now()) + "." + ext;
+
+    // Generate a new filename
+    const newFileName = `${id}_000${Date.now()}.${ext}`;
+    const newPath = Path.join(uploadDir, newFileName);
+
+    // Move the file to the target directory
     fs.renameSync(path, newPath);
 
-    uploadedPhotos.push(Path.basename(newPath));
+    // Add the new file name to the response list
+    uploadedPhotos.push(newFileName);
   }
-  res.json(uploadedPhotos);
+
+  // Send response with the list of uploaded file names
+  res.json(uploadedPhotos[0]);
+};
+const enter = (req, res) => {
+  const { id, status, justification, token, date } = req.body;
+  let Date;
+  if (!date) {
+    Date = new Date().toISOString().split("T")[0];
+  } else {
+    Date = date;
+  }
+
+  if (token) {
+    jwt.verify(token, jwtSecret, {}, async (err, userData) => {
+      if (err) return res.json("not authorised");
+    });
+  }
+  pool.query(
+    queries.insertAttendance,
+    [id, Date, status, justification],
+    (error, results) => {
+      if (error) return res.json("error");
+      res.json("success");
+    }
+  );
+};
+const leave = (req, res) => {
+  const { id, token, date, hours_worked } = req.body;
+  if (token) {
+    jwt.verify(token, jwtSecret, {}, async (err, userData) => {
+      if (err) return res.json("not authorised");
+    });
+  }
+  pool.query(
+    queries.updateAttendance,
+    [hours_worked, id, date],
+    (error, results) => {
+      if (error) return res.json("error");
+      res.json("success");
+    }
+  );
+};
+const fetchAbsences = (req, res) => {
+  const { token, id } = req.body;
+
+  if (token) {
+    jwt.verify(token, jwtSecret, {}, async (err, userData) => {
+      if (err) return res.json("not authorised");
+    });
+  }
+  pool.query(queries.fetchAbsences, [id], (error, results) => {
+    if (error) return res.json("an error occured while fetching");
+    res.json(results.rows[0]);
+  });
 };
 
-export { uploadPhoto, getUserProfile, loginUser };
+const requestAbsence = (req, res) => {
+  const { date, selected, photoLink, id, token, username } = req.body;
+  console.log({ date, selected, photoLink, id, token, username });
+  if (token) {
+    jwt.verify(token, jwtSecret, {}, async (err, userData) => {
+      if (err) return res.json("not authorised");
+    });
+  }
+
+  pool.query(
+    queries.requestAbsence,
+    [id, username, date, photoLink, selected],
+    (error, results) => {
+      if (error) return res.json("an error occured while fetching");
+      res.json(results.rows[0]);
+    }
+  );
+};
+
+export {
+  fetchAbsences,
+  uploadPhoto,
+  getUserProfile,
+  loginUser,
+  enter,
+  leave,
+  requestAbsence,
+};
