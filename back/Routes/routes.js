@@ -6,6 +6,7 @@ import {
   getUserProfile,
   enter,
   requestAbsence,
+  payCalculator,
 } from "./controller.js";
 
 import { uploadPhoto } from "./controller.js";
@@ -20,5 +21,6 @@ router.post("/profile", getUserProfile);
 router.post("/enter", enter);
 router.post("/fetchAbsences", fetchAbsences);
 router.post("/requestAbsence", requestAbsence);
+router.post("/payCalculator", payCalculator);
 
 export default router;
