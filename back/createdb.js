@@ -64,6 +64,14 @@ CREATE TABLE requestAbsence (
     status VARCHAR(10) CHECK (status IN ('pending', 'accepted', 'rejected')) DEFAULT 'pending'
 );
 
+--Create table for storing payment code
+CREATE TABLE SalaryComponents (
+    id SERIAL PRIMARY KEY,       -- Unique identifier for each record
+    name VARCHAR(255) NOT NULL, -- Name of the salary component
+    code VARCHAR(10),           -- Component code (e.g., R001, R500)
+    cnas BOOLEAN DEFAULT FALSE, -- CNAS indicator (y/n converted to boolean)
+    irg BOOLEAN DEFAULT FALSE   -- IRG indicator (y/n converted to boolean)
+);
 `;
 
 // Function to execute the script

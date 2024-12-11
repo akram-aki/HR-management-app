@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import Absences from "./Absences";
 import { userContext } from "../../User";
+import Payslips from "./Payslips";
 import axios from "axios";
 
 const AdminDashboard = () => {
@@ -11,6 +12,8 @@ const AdminDashboard = () => {
     switch (activeTab) {
       case "Overview":
         return <Absences />;
+      case "Payslips":
+        return <Payslips />;
       default:
         return <Absences />;
     }

@@ -2,6 +2,8 @@ import Router from "express";
 import multer from "multer";
 import {
   fetchAbsences,
+  employeeSalary,
+  getSalaryComponenets,
   fetchEMployeeAbsenceRequest,
   updateJustificationState,
   fetchPendingAbsences,
@@ -30,6 +32,8 @@ router.post("/fetchPendingAbsences", fetchPendingAbsences);
 router.post("/updateJustificationState", updateJustificationState);
 router.post("/getEmployeeAbsenceRequest", fetchEMployeeAbsenceRequest);
 router.post("/fetchThisMonthAttendance", fetchThisMonthAttendance);
+router.post("/getSalaryComponenets", getSalaryComponenets);
+router.post("/employeeSalary", employeeSalary);
 
 // Role-based protected routes
 router.get("/admin/dashboard", verifyRole("admin"), (req, res) => {

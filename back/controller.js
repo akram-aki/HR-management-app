@@ -210,12 +210,8 @@ const requestAbsence = async (req, res) => {
   );
 };
 
-const payCalculator = (req, res) => {
-  const { id, token, totSI } = req.body;
-  let base_salary;
-
-  const calIrg = (base_salary, tot) => {
-    const baseImposable = base_salary + tot;
+const payCalculator = (sommeC, sommeI) => {
+  const calIrg = (baseImposable) => {
     let [x1, x2, x3, x4] = [30000, 10000, 40000, 80000];
     let [y1, y2, y3, y4] = [0, 0.2, 0.3, 0.33];
     let Y;
@@ -232,21 +228,15 @@ const payCalculator = (req, res) => {
     Y = Y - t;
     return Y;
   };
-
-  if (token) {
-    jwt.verify(token, jwtSecret, {}, async (err, userData) => {
-      if (err) return res.json("not authorised");
-    });
-  }
-
-  pool.query("SELECT * FROM Employees WHERE id=$1", [id], (error, result) => {
-    if (error) return res.json("an error occured while fetching");
-    base_salary = result.rows[0].base_salary;
-  });
-  const RETENUE_SECU_SLE = base_salary * 0.09;
-  const RETENUE_IRG = calIrg(base_salary, tot);
-  const NET_A_PAYER = base_salary + totSI - RETENUE_SECU_SLE - RETENUE_IRG;
-  res.json({ RETENUE_SECU_SLE, RETENUE_IRG, NET_A_PAYER });
+  const RETENUE_SECU_SLE = sommeC * 0.09;
+  const RETENUE_IRG = calIrg(sommeI);
+  const NET_A_PAYER = sommeC - RETENUE_SECU_SLE - RETENUE_IRG;
+  console.log(RETENUE_SECU_SLE, RETENUE_IRG, NET_A_PAYER);
+  return {
+    RETENUE_SECU_SLE: RETENUE_SECU_SLE,
+    RETENUE_IRG: RETENUE_IRG,
+    NET_A_PAYER: NET_A_PAYER,
+  };
 };
 
 const fetchPendingAbsences = (req, res) => {
@@ -324,8 +314,55 @@ const fetchThisMonthAttendance = (req, res) => {
   );
 };
 
+const getSalaryComponenets = (req, res) => {
+  const { token } = req.body;
+  if (token) {
+    jwt.verify(token, jwtSecret, {}, async (err, userData) => {
+      if (err) return res.json("not authorised");
+    });
+  } else return res.json("not authorised");
+  pool.query("SELECT * FROM salarycomponents ", (error, results) => {
+    if (error) return res.json("an error occured while fetching");
+    res.json(results.rows);
+  });
+};
+
+const employeeSalary = (req, res) => {
+  const { token, employeeId, inputData } = req.body;
+  console.log({ inputData });
+
+  if (token) {
+    jwt.verify(token, jwtSecret, {}, async (err, userData) => {
+      if (err) return res.json("not authorised");
+    });
+  } else return res.json("not authorised");
+  pool.query(
+    'SELECT * FROM "employees" WHERE id=$1',
+    [employeeId],
+    (error, results) => {
+      if (error) return res.json("employee doesnt exist");
+    }
+  );
+  const sommeI = inputData.reduce((sum, item) => {
+    if (item.cnas === true) {
+      return sum + parseInt(item.value);
+    }
+    return sum; // Keep the current sum if condition is not met
+  }, 0);
+  const sommeC = inputData.reduce((sum, item) => {
+    if (item.irg === true) {
+      return sum + parseInt(item.value);
+    }
+    return sum; // Keep the current sum if condition is not met
+  }, 0);
+  const pay = payCalculator(sommeC, sommeI);
+  res.json(pay);
+};
+
 export {
   fetchAbsences,
+  employeeSalary,
+  getSalaryComponenets,
   updateJustificationState,
   fetchPendingAbsences,
   uploadPhoto,
@@ -335,6 +372,5 @@ export {
   leave,
   requestAbsence,
   fetchThisMonthAttendance,
-  payCalculator,
   fetchEMployeeAbsenceRequest,
 };
