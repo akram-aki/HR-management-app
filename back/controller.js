@@ -228,7 +228,7 @@ const payCalculator = (sommeC, sommeI) => {
     Y = Y - t;
     return Y;
   };
-  const RETENUE_SECU_SLE = sommeC * 0.09;
+  const RETENUE_SECU_SLE = sommeC + 0.09;
   const RETENUE_IRG = calIrg(sommeI);
   const NET_A_PAYER = sommeC - RETENUE_SECU_SLE - RETENUE_IRG;
   console.log(RETENUE_SECU_SLE, RETENUE_IRG, NET_A_PAYER);
