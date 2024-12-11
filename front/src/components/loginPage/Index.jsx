@@ -63,22 +63,20 @@ export default function Login(props) {
           <div class="mt-12 flex flex-col items-center">
             <div class="w-full flex-1 mt-8">
               <div class="flex flex-col items-center">
-                <h1 className="text-3xl font-semibold mb-8">HR Management App</h1>
-
-
-
+                <h1 className="text-3xl font-semibold mb-8">
+                  HR Management App
+                </h1>
               </div>
 
               <div class="my-12 border-b text-center">
-                <div
-                  class="leading-none px-2 inline-block text-sm text-gray-600 tracking-wide font-medium bg-white transform translate-y-1/2">
-                </div>
+                <div class="leading-none px-2 inline-block text-sm text-gray-600 tracking-wide font-medium bg-white transform translate-y-1/2"></div>
               </div>
 
               <div class="mx-auto max-w-xs">
                 <input
                   class="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
-                  type="email" placeholder="Email"
+                  type="email"
+                  placeholder="Email"
                   value={userName}
                   onChange={(e) => setUserName(e.target.value)}
                 />
@@ -87,18 +85,25 @@ export default function Login(props) {
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Password" />
+                  placeholder="Password"
+                />
                 <button
-                  class="mt-5 tracking-wide font-semibold bg-green-400 text-white-500 w-full py-4 rounded-lg hover:bg-green-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none">
-                  <svg class="w-6 h-6 -ml-2" fill="none" stroke="currentColor" stroke-width="2"
-                    stroke-linecap="round" stroke-linejoin="round">
+                  onClick={handleLogin}
+                  class="mt-5 tracking-wide font-semibold bg-green-400 text-white-500 w-full py-4 rounded-lg hover:bg-green-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none"
+                >
+                  <svg
+                    class="w-6 h-6 -ml-2"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
                     <path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
                     <circle cx="8.5" cy="7" r="4" />
                     <path d="M20 8v6M23 11h-6" />
                   </svg>
-                  <span class="ml-">
-                    Sign In
-                  </span>
+                  <span class="ml-">Sign In</span>
                 </button>
                 <p class="mt-6 text-xs text-gray-600 text-center">
                   <a href="#" class="border-b border-gray-500 border-dotted">
@@ -113,9 +118,7 @@ export default function Login(props) {
             </div>
           </div>
         </div>
-        <div class="flex-1 bg-green-100 text-center hidden lg:flex">
-
-        </div>
+        <div class="flex-1 bg-green-100 text-center hidden lg:flex"></div>
       </div>
     </div>
   );

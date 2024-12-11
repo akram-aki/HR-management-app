@@ -1,5 +1,6 @@
 import { useContext } from "react";
 import { userContext } from "../../User";
+import Cookies from "js-cookie";
 
 export default function Nav() {
   const { username } = useContext(userContext);
@@ -10,7 +11,12 @@ export default function Nav() {
           <p className=" cursor-default">
             {"Welcome " + JSON.stringify(username)}
           </p>
-          <button className="bg-[#cc1b1b] text-white px-3 font-light rounded-md p-1">
+          <button
+            onClick={() => {
+              Cookies.set("token", "");
+            }}
+            className="bg-[#cc1b1b] text-white px-3 font-light rounded-md p-1"
+          >
             Sign out
           </button>
         </>
