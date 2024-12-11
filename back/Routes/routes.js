@@ -2,9 +2,11 @@ import Router from "express";
 import multer from "multer";
 import {
   fetchAbsences,
+  fetchEMployeeAbsenceRequest,
   updateJustificationState,
   fetchPendingAbsences,
   loginUser,
+  fetchThisMonthAttendance,
   getUserProfile,
   enter,
   requestAbsence,
@@ -26,6 +28,8 @@ router.post("/fetchAbsences", fetchAbsences);
 router.post("/requestAbsence", requestAbsence);
 router.post("/fetchPendingAbsences", fetchPendingAbsences);
 router.post("/updateJustificationState", updateJustificationState);
+router.post("/getEmployeeAbsenceRequest", fetchEMployeeAbsenceRequest);
+router.post("/fetchThisMonthAttendance", fetchThisMonthAttendance);
 
 // Role-based protected routes
 router.get("/admin/dashboard", verifyRole("admin"), (req, res) => {
