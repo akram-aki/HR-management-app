@@ -10,8 +10,9 @@ const queries = {
     WHERE employee_id = $2 AND date = $3
   `,
   fetchAbsences: `SELECT * FROM Attendance WHERE employee_id = $1`,
-  requestAbsence: `INSERT INTO EmployeeAbsence (employee_id, employee_name, date, justification_photo_url, selected, status)
+  requestAbsence: `INSERT INTO requestedAbsence (employee_id, employee_name, date, justification_photo_url, selected, status)
       VALUES ($1,$2,$3,$4,$5,$6)`,
+  fetchPendingAbsences: `SELECT * FROM requestAbsence WHERE status = 'pending'`,
 };
 
 export { queries };

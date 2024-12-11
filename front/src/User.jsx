@@ -39,9 +39,5 @@ export function User({ children }) {
     return <div>Loading...</div>;
   }
 
-  return (
-    <userContext.Provider value={user}>
-      {children}
-    </userContext.Provider>
-  );
+  return <userContext.Provider value={user}>{children}</userContext.Provider>;
 }

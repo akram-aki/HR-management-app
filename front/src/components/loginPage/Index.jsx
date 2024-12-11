@@ -27,7 +27,7 @@ export default function Login(props) {
         if (role === "admin") {
           navigate("/admin");
         } else {
-          navigate("/homePage");
+          navigate("/");
         }
       })
       .catch(() => alert("Wrong credentials"));

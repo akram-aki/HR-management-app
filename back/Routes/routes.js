@@ -2,6 +2,8 @@ import Router from "express";
 import multer from "multer";
 import {
   fetchAbsences,
+  updateJustificationState,
+  fetchPendingAbsences,
   loginUser,
   getUserProfile,
   enter,
@@ -13,15 +15,17 @@ import { verifyRole } from "../middleware.js"; // Import middleware
 const router = Router();
 
 // Multer configuration
-//const idk = multer({ dest: "C:/Users/songo/Desktop/hadjer/api/Images" });
+const idk = multer({ dest: "C:/Users/songo/Desktop/hadjer/api/Images" });
 
 // Public routes
-//router.post("/uploadPhoto", idk.array("photos", 100), uploadPhoto);
+router.post("/uploadPhoto", idk.array("photos", 100), uploadPhoto);
 router.post("/login", loginUser);
 router.post("/profile", getUserProfile);
 router.post("/enter", enter);
 router.post("/fetchAbsences", fetchAbsences);
 router.post("/requestAbsence", requestAbsence);
+router.post("/fetchPendingAbsences", fetchPendingAbsences);
+router.post("/updateJustificationState", updateJustificationState);
 
 // Role-based protected routes
 router.get("/admin/dashboard", verifyRole("admin"), (req, res) => {

@@ -55,7 +55,7 @@ CREATE TABLE IF NOT EXISTS RolesPermissions (
 );
 
 -- Create Employee demand absense table
-CREATE TABLE EmployeeAbsence (
+CREATE TABLE requestAbsence (
     id SERIAL PRIMARY KEY,
     employee_id INT NOT NULL,
     employee_name VARCHAR(100) NOT NULL,

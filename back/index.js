@@ -18,6 +18,7 @@ app.use(
 );
 
 app.use("/", routes);
+app.use("/uploads", express.static("uploads"));
 
 app.listen(8000, () => {
   console.log("Server is running on port 8000");

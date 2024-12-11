@@ -118,7 +118,7 @@ const uploadPhoto = (req, res) => {
   }
 
   // Send response with the list of uploaded file names
-  res.json(uploadedPhotos[0]);
+  res.json({ photo: uploadedPhotos[0] });
 };
 const enter = (req, res) => {
   const { id, status, justification, token, date } = req.body;
@@ -167,6 +167,7 @@ const fetchAbsences = (req, res) => {
       if (err) return res.json("not authorised");
     });
   }
+
   pool.query(queries.fetchAbsences, [id], (error, results) => {
     if (error) return res.json("an error occured while fetching");
     res.json(results.rows[0]);
@@ -183,32 +184,31 @@ const requestAbsence = async (req, res) => {
       {
         headers: {
           ...formData.getHeaders(),
-          "Authorization": "Bearer ae76cabec710399e1cd216797b6e5e84b917ae75e7c3ffb94f74eba31aea0934"
-        }
-      });
-  }
-  catch (error) {
+          Authorization:
+            "Bearer ae76cabec710399e1cd216797b6e5e84b917ae75e7c3ffb94f74eba31aea0934",
+        },
+      }
+    );
+  } catch (error) {
     console.error("Error:", error.response?.data || error.message); // Handle error
   }
-};
-
-const { date, selected, photoLink, id, token, username } = req.body;
-console.log({ date, selected, photoLink, id, token, username });
-if (token) {
-  jwt.verify(token, jwtSecret, {}, async (err, userData) => {
-    if (err) return res.json("not authorised");
-  });
-}
-
-pool.query(
-  queries.requestAbsence,
-  [id, username, date, photoLink, selected],
-  (error, results) => {
-    if (error) return res.json("an error occured while fetching");
-    res.json(results.rows[0]);
+  const { date, selected, photoLink, id, token, username } = req.body;
+  console.log({ date, selected, photoLink, id, token, username });
+  if (token) {
+    jwt.verify(token, jwtSecret, {}, async (err, userData) => {
+      if (err) return res.json("not authorised");
+    });
   }
-);
 
+  pool.query(
+    queries.requestAbsence,
+    [id, username, date, photoLink, selected],
+    (error, results) => {
+      if (error) return res.json("an error occured while fetching");
+      res.json(results.rows[0]);
+    }
+  );
+};
 
 const payCalculator = (req, res) => {
   const { id, token, totSI } = req.body;
@@ -249,8 +249,39 @@ const payCalculator = (req, res) => {
   res.json({ RETENUE_SECU_SLE, RETENUE_IRG, NET_A_PAYER });
 };
 
+const fetchPendingAbsences = (req, res) => {
+  const { token } = req.body;
+  if (token) {
+    jwt.verify(token, jwtSecret, {}, async (err, userData) => {
+      if (err) return res.json("not authorised");
+    });
+  } else return res.json("not authorised");
+  pool.query(queries.fetchPendingAbsences, (error, results) => {
+    if (error) return res.json("an error occured while fetching");
+    res.json(results.rows);
+  });
+};
+const updateJustificationState = (req, res) => {
+  const { state, employee_id, token } = req.body;
+  if (token) {
+    jwt.verify(token, jwtSecret, {}, async (err, userData) => {
+      if (err) return res.json("not authorised");
+    });
+  } else return res.json("not authorised");
+  pool.query(
+    "UPDATE requestAbsence SET status=$1 WHERE employee_id=$2",
+    [state, employee_id],
+    (error, results) => {
+      if (error) return res.json(error);
+      res.json(results.rows);
+    }
+  );
+};
+
 export {
   fetchAbsences,
+  updateJustificationState,
+  fetchPendingAbsences,
   uploadPhoto,
   getUserProfile,
   loginUser,
