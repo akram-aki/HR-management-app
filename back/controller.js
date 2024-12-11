@@ -277,6 +277,52 @@ const updateJustificationState = (req, res) => {
     }
   );
 };
+const fetchEMployeeAbsenceRequest = (req, res) => {
+  const { token, id } = req.body;
+  if (token) {
+    jwt.verify(token, jwtSecret, {}, async (err, userData) => {
+      if (err) return res.json("not authorised");
+    });
+  } else return res.json("not authorised");
+  pool.query(queries.fetchEMployeeAbsenceRequest, [id], (error, results) => {
+    if (error) return res.json("an error occured while fetching");
+    res.json(results.rows);
+  });
+};
+
+const fetchThisMonthAttendance = (req, res) => {
+  const { token, id, year, month } = req.body;
+  let Year, Month;
+  if (!year) {
+    Year = new Date().getFullYear();
+  } else {
+    Year = year;
+  }
+  if (!month) {
+    Month = new Date().getMonth();
+  } else {
+    Month = month;
+  }
+  if (token) {
+    jwt.verify(token, jwtSecret, {}, async (err, userData) => {
+      if (err) return res.json("not authorised");
+    });
+  } else return res.json("not authorised");
+  pool.query(
+    queries.fetchCurrentMonthAttendance,
+    [id, Year, Month],
+    (error, results) => {
+      if (error) return res.json("an error occured while fetching");
+      let attendance = { id, present: 0, absent: 0 };
+      results.rows.map((item) => {
+        if (item.status === "present") attendance.present++;
+        else attendance.absent++;
+      });
+
+      res.json(attendance);
+    }
+  );
+};
 
 export {
   fetchAbsences,
@@ -288,5 +334,7 @@ export {
   enter,
   leave,
   requestAbsence,
+  fetchThisMonthAttendance,
   payCalculator,
+  fetchEMployeeAbsenceRequest,
 };

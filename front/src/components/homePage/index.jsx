@@ -9,7 +9,7 @@ import ContactHR from "./ContactHR";
 
 const HomePage = () => {
   const [activeTab, setActiveTab] = useState("Overview");
-  // const { username } = useContext(userContext);
+  const { id } = useContext(userContext);
   const renderContent = () => {
     switch (activeTab) {
       case "Overview":
@@ -22,9 +22,9 @@ const HomePage = () => {
         return <Overview />;
     }
   };
+
   return (
     <>
-      {/* {username ? ( */}
       <div className="flex flex-col h-screen bg-gray-100">
         {/* Top Navigation Bar */}
         <div className="bg-white shadow w-full p-2 flex items-center justify-between">
@@ -99,7 +99,6 @@ const HomePage = () => {
           </div>
         </div>
       </div>
-      {/* ) : null} */}
     </>
   );
 };
