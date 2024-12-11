@@ -214,9 +214,9 @@ const payCalculator = (sommeC, sommeI) => {
   const calIrg = (baseImposable) => {
     let [x1, x2, x3, x4] = [30000, 10000, 40000, 80000];
     let [y1, y2, y3, y4] = [0, 0.2, 0.3, 0.33];
-    let Y;
+    let Y = 0;
     if (baseImposable > 80000) {
-      Y = x1 * y1 + x2 * y2 + x3 * y3 + (baseImposable - x4) * y4;
+      Y = Number(x1 * y1) + x2 * y2 + x3 * y3 + (baseImposable - x4) * y4;
     } else if (baseImposable > 40000) {
       Y = x1 * y1 + x2 * y2 + (baseImposable - x3) * y3;
     } else if (baseImposable > 30000) {
@@ -228,7 +228,7 @@ const payCalculator = (sommeC, sommeI) => {
     Y = Y - t;
     return Y;
   };
-  const RETENUE_SECU_SLE = sommeC * 0.09;
+  const RETENUE_SECU_SLE = Number(sommeC * 0.09);
   const RETENUE_IRG = calIrg(sommeI);
   const NET_A_PAYER = sommeC - RETENUE_SECU_SLE - RETENUE_IRG;
   console.log(RETENUE_SECU_SLE, RETENUE_IRG, NET_A_PAYER);
