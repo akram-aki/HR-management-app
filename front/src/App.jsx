@@ -4,7 +4,6 @@ import { User } from "./User";
 import Login from "./components/loginPage/Index";
 import HomePage from "./components/homePage/index";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import AbsencePage from "./components/absencePage/Index";
 import axios from "axios";
 import PayslipsPage from "./components/payslipsPage/Index";
 
@@ -13,26 +12,25 @@ axios.defaults.baseURL = "http://localhost:8000";
 function App() {
   return (
     <>
-      <User>
-        <Router>
-          <Routes>
-            <Route path="/login" element={<Login />} />
-            <Route path="/" element={<HomePage />} />
-            <Route path="/absence" element={<AbsencePage />} />
-            <Route path="/payslips" element={<PayslipsPage />} />
+      {/* <User> */}
+      <Router>
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/" element={<HomePage />} />
+          <Route path="/payslips" element={<PayslipsPage />} />
 
-            {/* admin aroute */}
-            <Route
-              path="/admin"
-              element={
-                <ProtectedRoute role="hr_manager">
-                  <AdminDashboard />
-                </ProtectedRoute>
-              }
-            />
-          </Routes>
-        </Router>
-      </User>
+          {/* admin aroute */}
+          <Route
+            path="/admin"
+            element={
+              <ProtectedRoute role="hr_manager">
+                <AdminDashboard />
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
+      </Router>
+      {/* </User> */}
     </>
   );
 }

@@ -185,7 +185,7 @@ const requestAbsence = async (req, res) => {
         headers: {
           ...formData.getHeaders(),
           Authorization:
-            "Bearer ae76cabec710399e1cd216797b6e5e84b917ae75e7c3ffb94f74eba31aea0934",
+            "Bearer bd1504a981a2b0a2ca4de662702e4e7fd4f19af40ad257047ccf5bf4c351c3a4",
         },
       }
     );
