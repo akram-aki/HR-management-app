@@ -68,19 +68,7 @@ const HomePage = () => {
             >
               <i className="fas fa-users mr-2"></i>Payslips
             </a>
-            <a
-              className="block text-gray-500 py-2.5 px-4 my-4 rounded transition duration-200 hover:bg-gradient-to-r hover:from-cyan-500 hover:to-cyan-500 hover:text-white"
-              href="#"
-              onClick={() => setActiveTab('ContactHR')}
-            >
-              <i className="fas fa-store mr-2"></i>Contact HR
-            </a>
-            <a
-              className="block text-gray-500 py-2.5 px-4 my-4 rounded transition duration-200 hover:bg-gradient-to-r hover:from-cyan-500 hover:to-cyan-500 hover:text-white"
-              href="#"
-            >
-              <i className="fas fa-exchange-alt mr-2"></i>A
-            </a>
+
           </nav>
           <a
             className="block text-gray-500 py-2.5 px-4 my-2 rounded transition duration-200 hover:bg-gradient-to-r hover:from-cyan-500 hover:to-cyan-500 hover:text-white mt-auto"

@@ -1,28 +1,29 @@
 import React from 'react'
 import AbsenceForm from './AbsenceForm'
-function Absences() {
-  const daysAbsented = 7;
-  const maxDays = 10;
-  const pendingAbsenceRequests = 2;
-  const absenceRequests = [
-    {
-      id: 1,
-      name: 'John Doe',
-      startDate: '2021-10-01',
-      endDate: '2021-10-03',
-      status: 'Pending',
-      type: 'Sick Leave'
-    },
-    {
-      id: 2,
-      name: 'Jane Doe',
-      startDate: '2021-10-05',
-      endDate: '2021-10-07',
-      status: 'Approved',
-      type: 'Annual Leave',
-    }
+const daysAbsented = 7;
+const maxDays = 10;
+const pendingAbsenceRequests = 2;
+export const absenceRequests = [
+  {
+    id: 1,
+    name: 'John Doe',
+    startDate: '2021-10-01',
+    endDate: '2021-10-03',
+    status: 'Pending',
+    type: 'Sick Leave'
+  },
+  {
+    id: 2,
+    name: 'Jane Doe',
+    startDate: '2021-10-05',
+    endDate: '2021-10-07',
+    status: 'Approved',
+    type: 'Annual Leave',
+  }
 
-  ]
+]
+function Absences() {
+
 
 
 
