@@ -1,5 +1,5 @@
-import AdminDashboard from "./components/adminDashboard/Index";
-import ProtectedRoute from "./components/ProtectedRoute";
+// import AdminDashboard from "./components/adminDashboard/Index";
+// import ProtectedRoute from "./components/ProtectedRoute";
 import { User } from "./User";
 import Login from "./components/loginPage/Index";
 import HomePage from "./components/homePage/index";
