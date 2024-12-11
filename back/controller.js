@@ -1,4 +1,4 @@
-import pool from "../db.js";
+import pool from "./db.js";
 import { queries } from "./queries.js";
 import jwt from "jsonwebtoken";
 import axios from "axios";
@@ -173,24 +173,42 @@ const fetchAbsences = (req, res) => {
   });
 };
 
-const requestAbsence = (req, res) => {
-  const { date, selected, photoLink, id, token, username } = req.body;
-  console.log({ date, selected, photoLink, id, token, username });
-  if (token) {
-    jwt.verify(token, jwtSecret, {}, async (err, userData) => {
-      if (err) return res.json("not authorised");
-    });
+const requestAbsence = async (req, res) => {
+  const formData = new FormData();
+  formData.append("file", fs.createReadStream("uploads/paycheck.pdf"));
+  try {
+    const documentID = await axios.post(
+      "https://api.signnow.com/document",
+      formData,
+      {
+        headers: {
+          ...formData.getHeaders(),
+          "Authorization": "Bearer ae76cabec710399e1cd216797b6e5e84b917ae75e7c3ffb94f74eba31aea0934"
+        }
+      });
   }
-
-  pool.query(
-    queries.requestAbsence,
-    [id, username, date, photoLink, selected],
-    (error, results) => {
-      if (error) return res.json("an error occured while fetching");
-      res.json(results.rows[0]);
-    }
-  );
+  catch (error) {
+    console.error("Error:", error.response?.data || error.message); // Handle error
+  }
 };
+
+const { date, selected, photoLink, id, token, username } = req.body;
+console.log({ date, selected, photoLink, id, token, username });
+if (token) {
+  jwt.verify(token, jwtSecret, {}, async (err, userData) => {
+    if (err) return res.json("not authorised");
+  });
+}
+
+pool.query(
+  queries.requestAbsence,
+  [id, username, date, photoLink, selected],
+  (error, results) => {
+    if (error) return res.json("an error occured while fetching");
+    res.json(results.rows[0]);
+  }
+);
+
 
 const payCalculator = (req, res) => {
   const { id, token, totSI } = req.body;
