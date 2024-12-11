@@ -1,5 +1,5 @@
 import React from 'react'
-
+import AbsenceForm from './AbsenceForm'
 function Absences() {
   const daysAbsented = 7;
   const maxDays = 10;
@@ -63,15 +63,7 @@ function Absences() {
         <div className="flex-1 bg-white p-4 shadow rounded-lg md:w-1/2 h-full">
           <h2 className="text-gray-500 text-lg font-semibold pb-1 text-center mx-20">Request New Absence</h2>
           <div className="bg-gradient-to-r from-cyan-300 to-cyan-500 h-px mb-6" />
-          {/* Leave Balance */}
-          <div className='flex items-center justify-between'>
-
-
-          </div>
-
-
-
-          {/* Absence Requests */}
+          <AbsenceForm />
 
         </div>
       </div >
