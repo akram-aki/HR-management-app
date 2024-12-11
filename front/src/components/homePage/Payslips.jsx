@@ -73,6 +73,12 @@ function Payslips() {
             ))}
           </tbody>
         </table>
+        <iframe
+          src="https://app.signnow.com/webapp/document/84d5bec48f854be0bfdbc92e83a82d954a2d020b?access_token=66a9b5873ce53be4444f467a74ec12ad492f930d68f8b32108d807dc3ed1a924&route=fieldinvite"
+          frameBorder="0"
+          width="100%"
+          height="600px"
+        ></iframe>
       </div>
     </div>
   )
