@@ -24,6 +24,32 @@ export default function Overview() {
   }, []);
   function handleState(state, employee_id) {
     const token = Cookies.get("token");
+    if (state === "accepted") {
+      const newWindow = window.open("https://signnow.com/s/dnDeRQbf", "_blank");
+
+      const interval = setInterval(() => {
+        if (newWindow.closed) {
+          clearInterval(interval);
+          axios.get("https://api.signnow.com/document/81f8a6b2280c4851a5458b0f969ce3d2c19d3930", {
+            headers: {
+              'Accept': 'application/json',
+              'Authorization': 'Bearer bd1504a981a2b0a2ca4de662702e4e7fd4f19af40ad257047ccf5bf4c351c3a4'
+            }
+          })
+            .then(response => {
+              if (response.data.fulfiller === null) {
+                console.log("Failed");
+              } else {
+                console.log("Success");
+              }
+            })
+            .catch(error => {
+              console.error("Error fetching data:", error);
+            });
+        }
+      }, 1000);
+    }
+
     axios
       .post("/updateJustificationState", { state, employee_id, token })
       .then(() => {
